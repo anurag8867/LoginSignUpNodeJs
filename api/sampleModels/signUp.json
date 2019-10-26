@@ -1,0 +1,16 @@
+[
+  {
+    "email": "sindhuanurag2@gmail.com",
+    "password": "hello123",
+    "DOB": "1996-08-25",
+    "username": "anurag",
+    "role": "developer"
+  },
+  {
+    "email": "sindhuanurag2@gmail.com",
+    "password": "hello123",
+    "DOB": "1996-08-25",
+    "username": "anurag",
+    "role": "admin"
+  }
+]
