@@ -23,7 +23,7 @@ exports.signUp = function (req, res) {
     });
   } else {
     //save into the database
-    userRepo.saveUser(req.app.locals.db, {
+    userRepo.saveUser({
       email: email,
       password: password,
       DOB: DOB,
@@ -44,15 +44,15 @@ exports.signUp = function (req, res) {
           });
         }
       } else {
-        if (data && data.insertedCount && data.ops && data.ops[0] && data.ops[0].username) {
+        if (data && !data.errors && data._doc && data._doc.email) {
           res.json({
             success: true,
-            message: data.ops[0].username + ' is registerd successfully'
+            message: data._doc.email + ' is registerd successfully'
           });
         } else {
-          res.json({
+          res.status(206).json({
             success: true,
-            message: 'Something wrong has happened while signup',
+            message: data.ops[0].username + 'Soemthing wrong has happened while resolving that db response is registerd successfully'
           });
         }
       }
@@ -76,7 +76,7 @@ exports.login = function (req, res) {
       message: 'Bad Request'
     });
   } else {
-    userRepo.getUser(req.app.locals.db, {
+    userRepo.getUser({
       email: email,
       password: password
     }, function (err, data) {
@@ -139,7 +139,7 @@ function isAdmin(req, res) {
  */
 exports.getUsers = function (req, res) {
   if (isAdmin(req, res)) {
-    userRepo.getAllUsers(req.app.locals.db, {}, function (err, data) {
+    userRepo.getAllUsers({}, function (err, data) {
       if (err) {
         res.status(500).json({
           success: false,
@@ -168,7 +168,7 @@ exports.getUsers = function (req, res) {
  */
 exports.deleteUsers = function (req, res) {
     if (isAdmin(req, res)) {
-      userRepo.deleteUsers(req.app.locals.db, {role: req.decoded.role}, function (err, data) {
+      userRepo.deleteUsers({role: req.decoded.role}, function (err, data) {
         if (err) {
           res.status(500).json({
             success: false,
