@@ -1,6 +1,6 @@
-var MongoClient = require('mongodb').MongoClient,
-    dbConfig = require('../config/config');
+var mongoose = require('mongoose'),
+    paranthesisModel = mongoose.model('Parenthesis');
 
-exports.saveExpression = function (db, req, next) {
-  db.collection(dbConfig.paranthesisCollection).update(req, {$inc: {attempts: 1}}, {upsert: true}, next);
+exports.saveExpression = function (req, next) {
+  paranthesisModel.updateOne(req, {$inc: {attempts: 1}}, {upsert: true}, next);
 };

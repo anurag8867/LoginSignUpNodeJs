@@ -1,8 +1,10 @@
-var MongoClient = require('mongodb').MongoClient,
-    dbConfig = require('./dbLayer/config/config');
+var mongoose = require('mongoose'),
+    parenthesisModel = require('./api/models/parenthesisModel'),
+    userModel = require('./api/models/userModel');
 const express = require('express'),
     bodyParser = require('body-parser'),
-    port = process.env.PORT || 8000;
+    port = process.env.PORT || 8000,
+    createIndexes = require('./dbLayer/createIndexes');
 let user = require('./api/controllers/users'),
     paranthesis = require('./api/controllers/paranthesis'),
     middleware = require('./server/middleware');
@@ -25,17 +27,13 @@ function main() {
     res.status(404).send({url: req.originalUrl + ' not found'})
   });
 
-  // Creating a MongoDB connection pool and starting the application
-  // after the database connection is ready
-  MongoClient.connect(dbConfig.mongoUrl, (err, db) => {
-    if (err) {
-      console.log(`Failed to connect to the database. ${err.stack}`);
-    }
-    app.locals.db = db.db(dbConfig.database);
-    app.listen(port, () => {
-      console.log(`Node.js app is listening at http://localhost:${port}`);
-    });
+  // mongoose instance connection url connection
+  mongoose.Promise = global.Promise;
+  mongoose.connect('mongodb://localhost/database_name');
+  app.listen(port, () => {
+    console.log(`Node.js app is listening at http://localhost:${port}`);
   });
+
 }
 
 main();

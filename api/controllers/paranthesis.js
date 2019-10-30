@@ -7,8 +7,7 @@ exports.balanced = function (req, res) {
   if (paranthesisService.isParanthesisbalanced(req.body.paranthesis)) {
 
     //save into the database
-    paranthesisRepo.saveExpression(req.app.locals.db,
-        {
+    paranthesisRepo.saveExpression({
           email: req.decoded.email,
           message: "Success",
         }, function (err, data) {
