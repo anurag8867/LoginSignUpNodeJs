@@ -1,6 +1,8 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const port = process.env.PORT || 8000;
+var MongoClient = require('mongodb').MongoClient,
+    dbConfig = require('./dbLayer/config/config');
+const express = require('express'),
+    bodyParser = require('body-parser'),
+    port = process.env.PORT || 8000;
 let user = require('./api/controllers/users'),
     paranthesis = require('./api/controllers/paranthesis'),
     middleware = require('./server/middleware');
@@ -23,7 +25,17 @@ function main() {
     res.status(404).send({url: req.originalUrl + ' not found'})
   });
 
-  app.listen(port, () => console.log(`Server is listening on port: ${port}`));
+  // Creating a MongoDB connection pool and starting the application
+  // after the database connection is ready
+  MongoClient.connect(dbConfig.mongoUrl, (err, db) => {
+    if (err) {
+      console.log(`Failed to connect to the database. ${err.stack}`);
+    }
+    app.locals.db = db.db(dbConfig.database);
+    app.listen(port, () => {
+      console.log(`Node.js app is listening at http://localhost:${port}`);
+    });
+  });
 }
 
 main();
