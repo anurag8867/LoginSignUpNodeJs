@@ -23,7 +23,7 @@ exports.signUp = function (req, res) {
     });
   } else {
     //save into the database
-    userRepo.saveUser({
+    userRepo.saveUser(req.app.locals.db, {
       email: email,
       password: password,
       DOB: DOB,
@@ -76,7 +76,7 @@ exports.login = function (req, res) {
       message: 'Bad Request'
     });
   } else {
-    userRepo.getUser({
+    userRepo.getUser(req.app.locals.db, {
       email: email,
       password: password
     }, function (err, data) {
@@ -139,7 +139,7 @@ function isAdmin(req, res) {
  */
 exports.getUsers = function (req, res) {
   if (isAdmin(req, res)) {
-    userRepo.getAllUsers({}, function (err, data) {
+    userRepo.getAllUsers(req.app.locals.db, {}, function (err, data) {
       if (err) {
         res.status(500).json({
           success: false,
@@ -168,7 +168,7 @@ exports.getUsers = function (req, res) {
  */
 exports.deleteUsers = function (req, res) {
     if (isAdmin(req, res)) {
-      userRepo.deleteUsers({role: req.decoded.role}, function (err, data) {
+      userRepo.deleteUsers(req.app.locals.db, {role: req.decoded.role}, function (err, data) {
         if (err) {
           res.status(500).json({
             success: false,

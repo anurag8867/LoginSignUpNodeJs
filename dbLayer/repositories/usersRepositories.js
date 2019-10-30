@@ -14,37 +14,22 @@ MongoClient.connect(dbConfig.mongoUrl, function (err, db) {
   });
 });
 
-exports.saveUser = function (req, next) {
-  MongoClient.connect(dbConfig.mongoUrl, function(err, db) {
-    if (err) throw err;
-    var dbo = db.db(dbConfig.database);
-    dbo.collection(dbConfig.userCollection).insertOne(req, { unique: true }, next);  });
+exports.saveUser = function (db, req, next) {
+  db.collection(dbConfig.userCollection).insertOne(req, {unique: true}, next);
 };
 
 
-exports.getUser = function (req, next) {
-  MongoClient.connect(dbConfig.mongoUrl, function(err, db) {
-    if (err) throw err;
-    var dbo = db.db(dbConfig.database);
-
-    dbo.collection(dbConfig.userCollection).findOne(req, next);
-  });
-};
-
-exports.getAllUsers = function (req, next) {
-  MongoClient.connect(dbConfig.mongoUrl, function(err, db) {
-    if (err) throw err;
-    var dbo = db.db(dbConfig.database);
-    dbo.collection(dbConfig.userCollection).find(req).toArray(next);
-  });
+exports.getUser = function (db, req, next) {
+  db.collection(dbConfig.userCollection).findOne(req, next);
 };
 
 
-exports.deleteUsers = function (req, next) {
-  MongoClient.connect(dbConfig.mongoUrl, function(err, db) {
-    if (err) throw err;
-    var dbo = db.db(dbConfig.database);
-    dbo.collection(dbConfig.userCollection).deleteMany(req, next);
-  });
+exports.getAllUsers = function (db, req, next) {
+  db.collection(dbConfig.userCollection).find(req).toArray(next);
+};
+
+
+exports.deleteUsers = function (db, req, next) {
+  db.collection(dbConfig.userCollection).deleteMany(req, next);
 };
 
