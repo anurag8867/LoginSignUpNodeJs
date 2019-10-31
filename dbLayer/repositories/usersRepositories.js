@@ -2,7 +2,7 @@ var mongoose = require('mongoose'),
     UserModel = mongoose.model('Users');
 
 exports.saveUser = function (req, next) {
-  UserModel.create(req, {unique: true}, next);
+  UserModel.create(req, next);
 };
 
 
